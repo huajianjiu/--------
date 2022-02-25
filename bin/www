@@ -7,21 +7,21 @@
 var app = require('../app');
 var debug = require('debug')('wcproject:server');
 var http = require('http');
-const os = require('os');
+// const os = require('os');
 ///获取本机ip///
-function getIPAdress() {
-    var interfaces = os.networkInterfaces();
-    for (var devName in interfaces) {
-        var iface = interfaces[devName];
-        for (var i = 0; i < iface.length; i++) {
-            var alias = iface[i];
-            // console.log(alias);
-            if (alias.family === 'IPv4' && alias.address !== '192.168.56.1'&& alias.address !== '192.168.11.1' && alias.address !== '127.0.0.1' && !alias.internal) {
-                return alias.address;
-            }
-        }
-    }
-}
+// function getIPAdress() {
+//     var interfaces = os.networkInterfaces();
+//     for (var devName in interfaces) {
+//         var iface = interfaces[devName];
+//         for (var i = 0; i < iface.length; i++) {
+//             var alias = iface[i];
+//             // console.log(alias);
+//             if (alias.family === 'IPv4' && alias.address !== '192.168.56.1'&& alias.address !== '192.168.11.1' && alias.address !== '127.0.0.1' && !alias.internal) {
+//                 return alias.address;
+//             }
+//         }
+//     }
+// }
 const myHost = getIPAdress();
 /**
  * Get port from environment and store in Express.
@@ -48,7 +48,7 @@ function e () {
   const port = server.address().port
   // console.log(host,port);
   console.log("本机访问地址为 http://localhost:%s", port)
-  console.log("局域网内访问地址为 http://%s:%s", myHost, port)
+  // console.log("局域网内访问地址为 http://%s:%s", myHost, port)
 }
 e();
 /**

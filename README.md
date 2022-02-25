@@ -20,5 +20,5 @@
 ## 备注：
 
 > 数据库文件是`sql\fileshare.sql`
->
+> 本机访问`http://localhost:8080`,其他设备在同一局域网内访问`http://（服务端的IPV4地址）:8080`
 > 修改MySQL配置信息在`config\db.js`
