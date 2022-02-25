@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>我的文件</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="css/layuimini.css?v=2.0.4.2" media="all">
+    <link rel="stylesheet" href="css/themes/default.css" media="all">
+    <link rel="stylesheet" href="lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+</head>
+
+<body>
+  <div class="layuimini-container">
+    <div class="layuimini-main">
+      <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+          <button class="layui-btn data-add-btn" lay-event="upload"> 上传文件 </button>
+          </button>
+        </div>
+      </script>
+      <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+      <script type="text/html" id="currentTableBar">
+        <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+      </script>
+
+    </div>
+  </div>
+  <script src="/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+  <script src="/js/lay-config.js" charset="utf-8"></script>
+  <script>
+    layui.use(['form', 'table', 'laydate', 'cookie'], function () {
+      var $ = layui.jquery,
+        form = layui.form,
+        table = layui.table,
+        cookie = layui.cookie;
+      // 初始化表格
+      var tableIns = table.render({
+        elem: '#currentTableId',
+        url: '/filelist',
+        toolbar: '#toolbarDemo',
+        defaultToolbar: ['filter', 'exports', {
+          title: '提示',
+          layEvent: 'LAYTABLE_TIPS',
+          icon: 'layui-icon-tips'
+        }],
+        cols: [
+          [{
+              field: 'filename',
+              width: 150,
+              title: '文件名',
+            },
+            {
+              field: 'type',
+              width: 80,
+              title: '类型',
+            },
+            {
+              field: 'size',
+              width: 110,
+              title: '大小',
+              align: "center",
+              sort: true
+            },
+            {
+              field: 'date',
+              width: 180,
+              title: '上传时间',
+              align: "center",
+              sort: true,
+            },
+            {
+              width: 110,
+              toolbar: '#currentTableBar',
+              align: "center",
+              
+            },
+            {
+              width: 80,
+              align: "center",
+              templet: function (d) {
+                return '<a class="layui-btn layui-btn-xs" download href="'+d.url+'" >下载</a>';
+              },
+              fixed: "right"
+            }
+          ]
+        ],
+        limits: [10, 15, 20, 25, 50, 100],
+        limit: 10,
+        page: true,
+        // skin: 'line'
+      });
+      /**
+       * toolbar监听事件
+       */
+      table.on('toolbar(currentTableFilter)', function (obj) {
+
+        if (obj.event === 'upload') { // 监听添加操作
+
+          var index = layer.open({
+            title: '上传文件',
+            type: 2,
+            shade: 0.2,
+            maxmin: true,
+            shadeClose: true,
+            area: ['100%', '100%'],
+            content: '../page/upload.html',
+          });
+          $(window).on("resize", function () {
+            layer.full(index);
+          });
+        }
+      });
+      table.on('tool(currentTableFilter)', function (obj) {
+        var data = obj.data;
+        data=JSON.stringify(data);
+        if (obj.event === 'delete') {
+          layer.confirm('您确定要删除吗？', function (index) {
+            $.ajax({
+              url: '/',
+              method: "DELETE",
+              data: data,
+              contentType: "application/json",
+              error: function (err) {
+                layer.msg(err.msg, {
+                  icon: 2
+                });
+              }
+            })
+            obj.del();
+            layer.close(index);
+          });
+        }
+      });
+
+    });
+  </script>
+</body>
+
+</html>
