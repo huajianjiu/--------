@@ -22,7 +22,7 @@ var http = require('http');
 //         }
 //     }
 // }
-const myHost = getIPAdress();
+// const myHost = getIPAdress();
 /**
  * Get port from environment and store in Express.
  */
